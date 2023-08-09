@@ -1,0 +1,126 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node *next;
+};
+
+void display(struct Node *head) {
+    printf("Linked List: ");
+    struct Node *current = head;
+    while (current != NULL) {
+        printf("%d -> ", current->data);
+        current = current->next;
+    }
+    printf("NULL\n");
+}
+
+struct Node *insertAtBeginning(struct Node *head, int data) {
+    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = head;
+    return newNode;
+}
+
+struct Node *insertAtEnd(struct Node *head, int data) {
+    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+
+    if (head == NULL) {
+        return newNode;
+    }
+
+    struct Node *current = head;
+    while (current->next != NULL) {
+        current = current->next;
+    }
+    current->next = newNode;
+
+    return head;
+}
+
+struct Node *deleteAtBeginning(struct Node *head) {
+    if (head == NULL) {
+        printf("List is empty, cannot delete.\n");
+        return NULL;
+    }
+
+    struct Node *temp = head;
+    head = head->next;
+    free(temp);
+
+    return head;
+}
+
+struct Node *deleteAtEnd(struct Node *head) {
+    if (head == NULL) {
+        printf("List is empty, cannot delete.\n");
+        return NULL;
+    }
+
+    if (head->next == NULL) {
+        free(head);
+        return NULL;
+    }
+
+    struct Node *current = head;
+    while (current->next->next != NULL) {
+        current = current->next;
+    }
+    free(current->next);
+    current->next = NULL;
+
+    return head;
+}
+
+int main() {
+    struct Node *head = NULL;
+    int choice, data;
+
+    while (1) {
+        printf("\nLinked List Operations:\n");
+        printf("1. Insert at beginning\n");
+        printf("2. Insert at end\n");
+        printf("3. Delete at beginning\n");
+        printf("4. Delete at end\n");
+        printf("5. Display\n");
+        printf("6. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter data to insert: ");
+                scanf("%d", &data);
+                head = insertAtBeginning(head, data);
+                break;
+
+            case 2:
+                printf("Enter data to insert: ");
+                scanf("%d", &data);
+                head = insertAtEnd(head, data);
+                break;
+
+            case 3:
+                head = deleteAtBeginning(head);
+                break;
+
+            case 4:
+                head = deleteAtEnd(head);
+                break;
+
+            case 5:
+                display(head);
+                break;
+
+            case 6:
+                printf("Exiting program.\n");
+                return 0;
+
+            default:
+                printf("Invalid choice. Please enter a valid option.\n");
+        }
+    }
+}
